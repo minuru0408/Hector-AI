@@ -11,11 +11,11 @@ const config = {
 
 // Create GUI
 const gui = new dat.GUI();
-const particlesFolder = gui.addFolder('Particles');
-particlesFolder.add(config.particles, 'size', 0.1, 5.0).step(0.1);
-particlesFolder.add(config.particles, 'speed', 0.0, 1.0).step(0.01);
-particlesFolder.add(config.particles, 'noiseFrequency', 0.0, 2.0).step(0.1);
-particlesFolder.add(config.particles, 'opacity', 0.0, 1.0).step(0.05);
-particlesFolder.open();
+const folder = gui.addFolder('Particles');
+folder.add(config.particles, 'size', 0.1, 5.0).step(0.1);
+folder.add(config.particles, 'speed', 0.0, 1.0).step(0.01);
+folder.add(config.particles, 'noiseFrequency', 0.0, 2.0).step(0.1);
+folder.add(config.particles, 'opacity', 0.0, 1.0).step(0.05);
+folder.open();
 
 export default config;
