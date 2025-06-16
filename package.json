@@ -1,0 +1,17 @@
+{
+  "name": "gpu-particles",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "parcel serve ./src/index.html --open",
+    "build": "parcel build ./src/index.html"
+  },
+  "devDependencies": {
+    "parcel": "^2.11.0"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ]
+}
