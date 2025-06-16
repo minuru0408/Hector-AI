@@ -1,7 +1,10 @@
 import config from './config';
 
 const canvas = document.getElementById('canvas');
-const gl = canvas.getContext('webgl2');
+const gl = canvas.getContext('webgl2', {
+    alpha: true,
+    premultipliedAlpha: false
+});
 
 if (!gl) {
     alert('WebGL2 is not supported in your browser');
@@ -19,3 +22,18 @@ for (let i = 0; i < GRID_SIZE; i++) {
 }
 
 // ... rest of WebGL setup and render code ...
+
+function render() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    gl.viewport(0, 0, canvas.width, canvas.height);
+
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    gl.clearColor(0, 0, 0, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    // ...existing code...
+}
+
+// ...existing code...
