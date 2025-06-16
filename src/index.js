@@ -41,6 +41,31 @@ gl.attachShader(program, vertexShader);
 gl.attachShader(program, fragmentShader);
 gl.linkProgram(program);
 
+// Particle positions and buffer setup
+const positions = new Float32Array([
+    0.0,  0.5,
+   -0.5, -0.5,
+    0.5, -0.5,
+]);
+
+const positionBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+
+const vao = gl.createVertexArray();
+gl.bindVertexArray(vao);
+
+const positionAttributeLocation = gl.getAttribLocation(program, "position");
+gl.enableVertexAttribArray(positionAttributeLocation);
+gl.vertexAttribPointer(
+    positionAttributeLocation,
+    2,          // size (num components)
+    gl.FLOAT,   // type
+    false,      // normalize
+    0,          // stride
+    0           // offset
+);
+
 function render() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -50,9 +75,12 @@ function render() {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     gl.useProgram(program);
+    gl.bindVertexArray(vao);
+    
     const opacityLocation = gl.getUniformLocation(program, 'opacity');
     gl.uniform1f(opacityLocation, config.particles.opacity);
 
+    gl.drawArrays(gl.POINTS, 0, 3); // Draw as points instead of triangles
     requestAnimationFrame(render);
 }
 
