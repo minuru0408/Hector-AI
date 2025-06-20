@@ -1,13 +1,18 @@
+html,
 body {
+    height: 100%;
     margin: 0;
+}
+
+body {
     overflow: hidden;
-    background-color: #0a0a0a;
+    background-color: #000;
     background-image:
-        linear-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
-        linear-gradient(rgba(255, 255, 255, 0.1) 10px, transparent 10px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.1) 10px, transparent 10px);
-    background-size: 50px 50px, 50px 50px, 250px 250px, 250px 250px;
+        radial-gradient(circle, #fff 1px, transparent 0),
+        repeating-linear-gradient(#ccc 0 1px, transparent 1px 100px),
+        repeating-linear-gradient(90deg, #ccc 0 1px, transparent 1px 100px);
+    background-size: 20px 20px, 100px 100px, 100px 100px;
+    background-position: 0 0;
 }
 
 canvas {
