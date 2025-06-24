@@ -1,0 +1,56 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  background-color: #000;
+
+  /* 
+   * 1) Subtle 100px–spaced grid lines at 5% white
+   * 2) 25px–spaced dots at 7% white, centered between those lines
+   */
+  background-image:
+    /* horizontal lines */  linear-gradient(rgba(255,255,255,0.02) 1px, transparent 0),
+    /* vertical   lines */  linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 0),
+    /* dots layer A    */  radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 0),
+    /* dots layer B    */  radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 0);
+
+  /* 
+   * Size of each pattern:
+   *   grid: 100×100
+   *   dots:  25×25
+   */
+  background-size:
+    150px 150px,  /* increased grid spacing */
+    150px 150px,
+    30px  30px,   /* increased dots spacing */
+    30px  30px;
+
+  /*
+   * Offset everything by half a cell so lines & dots sit
+   * roughly 50px/12.5px in from the edges.
+   */
+  background-position:
+    75px   75px,    /* increased edge offset for grid */
+    75px   75px,
+    15px   15px,    /* increased edge offset for dots */
+    0      0;
+
+  /* lock the pattern behind your canvas */
+  background-attachment: fixed;
+  overflow: hidden;
+}
+
+canvas {
+  position: absolute;
+  top:      0;
+  left:     0;
+  width:    100%;
+  height:   100%;
+  border:   1px solid rgba(255,255,255,0.15);
+  background: transparent;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.dg.ac {
+  z-index: 1000 !important;
+}
