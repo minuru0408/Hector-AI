@@ -2,36 +2,50 @@ html, body {
   height: 100%;
   margin: 0;
   background-color: #000;
+
   /* 
-    1) 100px grid lines (horizontal + vertical)
-    2) 20px dot pattern, staggered 10px so they sit between the lines 
-  */
+   * 1) Subtle 100px–spaced grid lines at 5% white
+   * 2) 25px–spaced dots at 7% white, centered between those lines
+   */
   background-image:
-    linear-gradient(rgba(255,255,255,0.1) 1px, transparent 0),
-    linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 0),
-    radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 0),
-    radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 0);
+    /* horizontal lines */  linear-gradient(rgba(255,255,255,0.05) 1px, transparent 0),
+    /* vertical   lines */  linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 0),
+    /* dots layer A    */  radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 0),
+    /* dots layer B    */  radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 0);
+
+  /* 
+   * Size of each pattern:
+   *   grid: 100×100
+   *   dots:  25×25
+   */
   background-size:
     100px 100px,
     100px 100px,
-    20px 20px,
-    20px 20px;
+    25px  25px,
+    25px  25px;
+
+  /*
+   * Offset everything by half a cell so lines & dots sit
+   * roughly 50px/12.5px in from the edges.
+   */
   background-position:
-    0   0,   /* big lines */
-    0   0,   /* big lines */
-    10px 10px, /* dots */
-    0   0;   /* dots */
-  /* lock it in place */
+    50px   50px,   /* grid horizontal */
+    50px   50px,   /* grid vertical */
+    12.5px 12.5px, /* dots A */
+    0      0;      /* dots B */
+
+  /* lock the pattern behind your canvas */
   background-attachment: fixed;
+  overflow: hidden;
 }
 
 canvas {
   position: absolute;
-  top:   0;
-  left:  0;
-  width: 100%;
-  height:100%;
-  border: 1px solid rgba(255,255,255,0.2);
+  top:      0;
+  left:     0;
+  width:    100%;
+  height:   100%;
+  border:   1px solid rgba(255,255,255,0.15);
   background: transparent;
 }
 
