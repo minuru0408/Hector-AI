@@ -1,35 +1,40 @@
 html, body {
   height: 100%;
   margin: 0;
-}
-body {
-  overflow: hidden;
   background-color: #000;
+  /* 
+    1) 100px grid lines (horizontal + vertical)
+    2) 20px dot pattern, staggered 10px so they sit between the lines 
+  */
   background-image:
-    /* 100px grid lines: horizontal + vertical */
-    linear-gradient(rgba(255,255,255,0.15) 1px, transparent 0),
-    linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 0),
-    /* 20px dots: offset by 10px on the second layer for staggering */
-    radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 0),
-    radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 0);
+    linear-gradient(rgba(255,255,255,0.1) 1px, transparent 0),
+    linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 0),
+    radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 0),
+    radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 0);
   background-size:
     100px 100px,
     100px 100px,
     20px 20px,
     20px 20px;
   background-position:
-    0 0,
-    0 0,
-    0 0,
-    10px 10px;
+    0   0,   /* big lines */
+    0   0,   /* big lines */
+    10px 10px, /* dots */
+    0   0;   /* dots */
+  /* lock it in place */
+  background-attachment: fixed;
 }
+
 canvas {
   position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  top:   0;
+  left:  0;
+  width: 100%;
+  height:100%;
   border: 1px solid rgba(255,255,255,0.2);
   background: transparent;
 }
+
 .dg.ac {
   z-index: 1000 !important;
 }
