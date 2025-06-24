@@ -8,10 +8,10 @@ html, body {
    * 2) 25px–spaced dots at 7% white, centered between those lines
    */
   background-image:
-    /* horizontal lines */  linear-gradient(rgba(255,255,255,0.05) 1px, transparent 0),
-    /* vertical   lines */  linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 0),
-    /* dots layer A    */  radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 0),
-    /* dots layer B    */  radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 0);
+    /* horizontal lines */  linear-gradient(rgba(255,255,255,0.02) 1px, transparent 0),
+    /* vertical   lines */  linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 0),
+    /* dots layer A    */  radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 0),
+    /* dots layer B    */  radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 0);
 
   /* 
    * Size of each pattern:
@@ -19,20 +19,20 @@ html, body {
    *   dots:  25×25
    */
   background-size:
-    100px 100px,
-    100px 100px,
-    25px  25px,
-    25px  25px;
+    150px 150px,  /* increased grid spacing */
+    150px 150px,
+    30px  30px,   /* increased dots spacing */
+    30px  30px;
 
   /*
    * Offset everything by half a cell so lines & dots sit
    * roughly 50px/12.5px in from the edges.
    */
   background-position:
-    50px   50px,   /* grid horizontal */
-    50px   50px,   /* grid vertical */
-    12.5px 12.5px, /* dots A */
-    0      0;      /* dots B */
+    75px   75px,    /* increased edge offset for grid */
+    75px   75px,
+    15px   15px,    /* increased edge offset for dots */
+    0      0;
 
   /* lock the pattern behind your canvas */
   background-attachment: fixed;
