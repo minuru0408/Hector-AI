@@ -1,0 +1,21 @@
+{
+  "name": "hector-ai",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "electron": "^37.1.0",
+    "parcel": "^2.15.4"
+  },
+  "dependencies": {
+    "dat.gui": "^0.7.9",
+    "lodash.debounce": "^4.0.8",
+    "three": "^0.178.0"
+  }
+}
