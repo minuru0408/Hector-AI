@@ -1,8 +1,8 @@
 {
   "name": "hector-ai",
   "version": "1.0.0",
-  "main": "electron.js",          
-  "type": "module",               
+  "main": "electron.js",
+  "type": "module",
   "scripts": {
     "dev": "parcel index.html",
     "build": "parcel build index.html",
@@ -19,6 +19,7 @@
   "dependencies": {
     "dat.gui": "^0.7.9",
     "lodash.debounce": "^4.0.8",
-    "three": "^0.178.0"
+    "three": "^0.178.0",
+    "three-stdlib": "^2.36.0"
   }
 }
