@@ -20,7 +20,7 @@ import { getRandomSpherePoint } from '../utils';
 import GUI from '../gui';
 console.log('GL class constructed');
 
-export default new class {
+export default class GL {
   constructor() {
     this.renderer = new THREE.WebGL1Renderer({ 
       antialias: true, 
