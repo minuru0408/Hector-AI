@@ -46,51 +46,51 @@ export default class OrbScene {
   }
 
   setupScene() {
-    // Move scene setup here
     this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
     this.camera.position.z = 5;
     this.camera.lookAt(0, 0, 0);
-
+  
     this.scene = new THREE.Scene();
-
-    // Improved particle system
+  
+    // ✅ Add red sphere for debugging
+    const debugSphere = new THREE.Mesh(
+      new THREE.SphereGeometry(0.5),
+      new THREE.MeshBasicMaterial({ color: 0xff0000 })
+    );
+    this.scene.add(debugSphere);
+  
+    // ✅ Create particle geometry
     const geometry = new THREE.BufferGeometry();
-    const particleCount = 15000;
+    const particleCount = 5000;
     const positions = new Float32Array(particleCount * 3);
-    
+  
     for (let i = 0; i < particleCount * 3; i += 3) {
-      const radius = 2;
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos((Math.random() * 2) - 1);
-      
-      positions[i] = radius * Math.sin(phi) * Math.cos(theta);
-      positions[i + 1] = radius * Math.sin(phi) * Math.sin(theta);
-      positions[i + 2] = radius * Math.cos(phi);
+      positions[i]     = (Math.random() - 0.5) * 4;
+      positions[i + 1] = (Math.random() - 0.5) * 4;
+      positions[i + 2] = (Math.random() - 0.5) * 4;
     }
-
-    console.log('Example particle:', positions[0], positions[1], positions[2]);
-    
+  
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-    // Material (what the points look like)
+  
+    // ✅ Use bigger and visible white particles
     const material = new THREE.PointsMaterial({
-      color: 0xff0000,    // Changed to red
-      size: 0.5,          // Increased size
-      transparent: false,  // Disabled transparency
+      color: 0xffffff,
+      size: 0.1,              // bigger
+      transparent: false,
       opacity: 1.0
     });
-
-    // 6. Particles (the visible cloud)
+  
     this.particles = new THREE.Points(geometry, material);
     this.scene.add(this.particles);
-
-    // 7. Controls (mouse orbit)
+  
+    // ✅ OrbitControls
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-
-    // Add resize handler
+  
+    // ✅ Resize support
     this.handleResize = this.handleResize.bind(this);
     window.addEventListener('resize', this.handleResize);
   }
+  
 
   checkWebGLSupport() {
     try {
