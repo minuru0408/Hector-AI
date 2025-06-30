@@ -130,32 +130,34 @@ export default class GL {
     }
 
     console.log('Initializing FBO...');
-    // width and height of FBO
     const width = 512;
     const height = 512;
 
-    // Populate a Float32Array of random positions
-    let length = width * height * 3;
-    let data = new Float32Array(length);
+    // Create and initialize data array
+    const length = width * height * 3;
+    const data = new Float32Array(length);
+    
+    // Fill with random positions
     for (let i = 0; i < length; i += 3) {
-      // Random positions inside a sphere
       const point = getRandomSpherePoint();
       data[i + 0] = point.x;
       data[i + 1] = point.y;
       data[i + 2] = point.z;      
-
-      // // Replaced with this if you want 
-      // // random positions inside a cube
-      // data[i + 0] = Math.random() - 0.5;
-      // data[i + 1] = Math.random() - 0.5;
-      // data[i + 2] = Math.random() - 0.5;      
     }
 
-    // Convert the data to a FloatTexture
-    const positions = new THREE.DataTexture(data, width, height, THREE.RGBFormat, THREE.FloatType);
+    // Create and configure DataTexture
+    const positions = new THREE.DataTexture(
+      data,
+      width,
+      height,
+      THREE.RGBFormat,
+      THREE.FloatType
+    );
+    
+    // Mark for GPU upload
     positions.needsUpdate = true;
 
-    // Simulation shader material used to update the particles' positions
+    // Create simulation material with verified texture
     this.simMaterial = new THREE.ShaderMaterial({
       vertexShader: simVertex,
       fragmentShader: simFragment,
