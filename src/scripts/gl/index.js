@@ -12,6 +12,8 @@ export default class OrbScene {
     this.isActive = false;
     this.rotationSpeed = 0.001;
 
+    console.log('OrbScene constructed');
+
     if (typeof window !== 'undefined') {
       if (document.readyState === 'complete') {
         this.init();
@@ -23,17 +25,20 @@ export default class OrbScene {
 
   init() {
     try {
-      this.renderer = new THREE.WebGLRenderer({ 
-        antialias: true, 
+      console.log('Initializing WebGL renderer');
+      this.renderer = new THREE.WebGLRenderer({
+        antialias: true,
         alpha: true,
-        powerPreference: "high-performance" 
+        powerPreference: "high-performance"
       });
       this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       this.renderer.setSize(window.innerWidth, window.innerHeight);
       this.renderer.setClearColor(0xffffff, 1); // white background
       document.body.appendChild(this.renderer.domElement);
+      console.log('Renderer added to DOM');
 
       this.setupScene();
+      console.log('Scene setup complete');
       this.isActive = true;
       this.animate();
     } catch (error) {
@@ -43,6 +48,7 @@ export default class OrbScene {
   }
 
   setupScene() {
+    console.log('Setting up scene');
     this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
     this.camera.position.z = 5;
     this.camera.lookAt(0, 0, 0);
@@ -128,6 +134,10 @@ export default class OrbScene {
 
   animate() {
     if (!this.isActive) return;
+    if (!this._loggedAnimation) {
+      console.log('Animation started');
+      this._loggedAnimation = true;
+    }
 
     requestAnimationFrame(() => this.animate());
 
