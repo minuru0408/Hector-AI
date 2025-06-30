@@ -18,6 +18,7 @@ import fullScreenFragment from 'bundle-text:./shaders/fullscreen.frag.glsl';
 import { getRandomSpherePoint } from '../utils';
 
 import GUI from '../gui';
+console.log('GL class constructed');
 
 export default new class {
   constructor() {
