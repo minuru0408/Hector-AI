@@ -1,4 +1,3 @@
-#version 100
 varying vec2 vUv;
 attribute vec2 position;
 
