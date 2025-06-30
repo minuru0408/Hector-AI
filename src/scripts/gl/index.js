@@ -94,6 +94,7 @@ export default class GL {
   }
 
   createFBO() {
+    console.log('Initializing FBO...');
     // width and height of FBO
     const width = 512;
     const height = 512;
@@ -150,6 +151,13 @@ export default class GL {
     this.fbo = new FBO(width, height, this.renderer, this.simMaterial, this.renderMaterial);
     // Add the particles to the scene
     this.scene.add(this.fbo.particles);
+
+    // Add verification after FBO creation
+    if (!this.fbo) {
+      console.error('FBO failed to initialize');
+      return;
+    }
+    console.log('FBO initialized successfully');
   }
 
   createScreenQuad() {
@@ -183,16 +191,23 @@ export default class GL {
   }
 
   render() {
-    this.controls.update();
+    // Add safety check
+    if (!this.fbo) {
+      console.error('Cannot render: FBO not initialized');
+      return;
+    }
 
+    this.controls.update();
     this.time = this.clock.getElapsedTime();
     console.log('Rendering frame at time', this.time);
 
-    this.fbo.update(this.time);
-
-    this.fullScreenQuad.material.uniforms.uTime.value = this.time;
-
-    this.renderer.render(this.scene, this.camera);
+    try {
+      this.fbo.update(this.time);
+      this.fullScreenQuad.material.uniforms.uTime.value = this.time;
+      this.renderer.render(this.scene, this.camera);
+    } catch (error) {
+      console.error('Render error:', error);
+    }
 
     this.renderer.setAnimationLoop(() => {
       this.time = this.clock.getElapsedTime();
