@@ -1,4 +1,4 @@
-import OrbScene from './gl';
+import OrbScene from './gl/index.js';
 
 let gl;
 try {
