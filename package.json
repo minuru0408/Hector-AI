@@ -20,7 +20,7 @@
     "tiny-emitter": "^2.1.0"
   },
   "devDependencies": {
-    "@parcel/transformer-glsl": "^2.9.3",
+    "@parcel/transformer-glsl": "^2.15.4",
     "@parcel/transformer-sass": "^2.15.4",
     "electron": "^37.1.0",
     "glslify-bundle": "^5.1.1",
