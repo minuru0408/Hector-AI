@@ -193,5 +193,13 @@ export default class GL {
     this.fullScreenQuad.material.uniforms.uTime.value = this.time;
 
     this.renderer.render(this.scene, this.camera);
+
+    this.renderer.setAnimationLoop(() => {
+      this.time = this.clock.getElapsedTime();
+      this.fbo.update(this.time);
+      this.fullScreenQuad.material.uniforms.uTime.value = this.time;
+      this.renderer.render(this.scene, this.camera);
+      console.log('Frame rendered');
+    });
   }
 }
