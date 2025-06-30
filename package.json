@@ -1,21 +1,15 @@
 {
-  "name": "iknowhowifeel",
+  "name": "hector-assistant",
   "version": "1.0.0",
-  "description": "Parcel quick setup to make one pagers",
+  "description": "Hector — a desktop AI assistant with real-time particle UI",
+  "main": "main.js",
   "scripts": {
-    "start": "parcel serve index.html",
-    "build": "parcel build index.html"
+    "dev": "parcel serve index.html",
+    "build": "parcel build index.html",
+    "start": "electron ."
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/marioecg/IknowhowIfeel.git"
-  },
-  "author": "marioecg",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/marioecg/IknowhowIfeel/issues"
-  },
-  "homepage": "https://github.com/marioecg/IknowhowIfeel#readme",
+  "author": "Minuru Sodbileg",
+  "license": "MIT",
   "dependencies": {
     "dat.gui": "^0.7.7",
     "glsl-curl-noise": "^0.0.4",
