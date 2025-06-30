@@ -8,124 +8,83 @@ export default class FBO {
     this.simulationMaterial = simulationMaterial;
     this.renderMaterial = renderMaterial;
 
-    this.gl = this.renderer.getContext();
+    // Create targets
+    this.targetA = this.createRenderTarget();
+    this.targetB = this.createRenderTarget();
 
-    this.init();
-  }
+    // Set initial positions
+    this.renderer.setRenderTarget(this.targetA);
+    this.renderer.render(this.getSimScene(), this.orthoCamera);
+    this.renderer.setRenderTarget(null);
 
-  init() {
-    this.checkHardware();
-    this.createTarget();
-    this.simSetup();
-    this.createParticles();
-  }
+    // Create particle system
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(width * height * 3);
+    const uvs = new Float32Array(width * height * 2);
 
-  checkHardware() {
-    // Check if  float textures is supported
-    // https://github.com/KhronosGroup/WebGL/blob/master/sdk/tests/conformance/extensions/oes-texture-float.html
-    if (!this.gl.getExtension("OES_texture_float")) {
-      throw new Error("float textures not supported");
+    let p = 0;
+    let u = 0;
+    for (let i = 0; i < width; i++) {
+      for (let j = 0; j < height; j++) {
+        uvs[u++] = i / (width - 1);
+        uvs[u++] = j / (height - 1);
+
+        positions[p++] = 0;
+        positions[p++] = 0;
+        positions[p++] = 0;
+      }
     }
 
-    // Check if reading textures inside the vertex shader is supported
-    // https://github.com/KhronosGroup/WebGL/blob/90ceaac0c4546b1aad634a6a5c4d2dfae9f4d124/conformance-suites/1.0.0/extra/webgl-info.html
-    if (this.gl.getParameter(this.gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS) == 0) {
-      throw new Error("vertex shader cannot read textures");
-    }
+    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute("uv", new THREE.BufferAttribute(uvs, 2));
+
+    this.particles = new THREE.Points(geometry, this.renderMaterial);
+
+    // Setup orthographic camera for simulation
+    this.orthoCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    this.orthoScene = new THREE.Scene();
+    const plane = new THREE.PlaneGeometry(2, 2);
+    this.quad = new THREE.Mesh(plane, this.simulationMaterial);
+    this.orthoScene.add(this.quad);
+
+    // Set initial texture
+    this.currentTarget = this.targetA;
+    this.renderMaterial.uniforms.positions.value = this.targetA.texture;
   }
 
-  createTarget() {
-    // Render target's scene and camera
-    this.scene = new THREE.Scene();
-    this.camera = new THREE.OrthographicCamera(
-      -1,
-      1,
-      1,
-      -1,
-      1 / Math.pow(2, 53),
-      1
-    );
-
-    // Create a render target texture
-    this.rtt = new THREE.WebGLRenderTarget(this.width, this.height, {
-      minFilter: THREE.NearestFilter, // Important because we want to sample square pixels
+  createRenderTarget() {
+    return new THREE.WebGLRenderTarget(this.width, this.height, {
+      format: THREE.RGBFormat,
+      type: THREE.FloatType,
+      minFilter: THREE.NearestFilter,
       magFilter: THREE.NearestFilter,
-      format: THREE.RGBAFormat, // Or RGBAFormat instead (to have a color for each particle, for example)
-      type: THREE.FloatType, // Important because we need precise coordinates (not ints)
     });
   }
 
-  simSetup() {
-    // Simulation
-    // Create a bi-unit quadrilateral that uses the simulation material to update the float texture
-    const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute(
-      "position",
-      new THREE.BufferAttribute(
-        new Float32Array([
-          -1, -1, 0, 1, -1, 0, 1, 1, 0,
-
-          -1, -1, 0, 1, 1, 0, -1, 1, 0,
-        ]),
-        3
-      )
-    );
-
-    geometry.setAttribute(
-      "uv",
-      new THREE.BufferAttribute(
-        new Float32Array([
-          0, 1, 1, 1, 1, 0,
-
-          0, 1, 1, 0, 0, 0,
-        ]),
-        2
-      )
-    );
-
-    this.mesh = new THREE.Mesh(geometry, this.simulationMaterial);
-
-    this.scene.add(this.mesh);
+  getSimScene() {
+    return this.orthoScene;
   }
 
-  createParticles() {
-    // Create a vertex buffer of size width * height with normalized coordinates
-    const length = this.width * this.height;
-    let vertices = new Float32Array(length * 3);
-    let colors_data = new Float32Array(length * 3);
-    for (let i = 0; i < length; i++) {
-      let i3 = i * 3;
-      vertices[i3 + 0] = (i % this.width) / this.width;
-      vertices[i3 + 1] = i / this.width / this.height;
+  swapTargets() {
+    const temp = this.currentTarget;
+    this.currentTarget =
+      this.currentTarget === this.targetA ? this.targetB : this.targetA;
 
-      // random color
-      colors_data[i3 + 0] = Math.random();
-      colors_data[i3 + 1] = Math.random();
-      colors_data[i3 + 2] = Math.random();
-    }
-
-    // Create the particles geometry
-    const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
-
-    // colors
-    geometry.setAttribute("color", new THREE.BufferAttribute(colors_data, 3));
-
-    // The renderMaterial is used to render the particles
-    this.particles = new THREE.Points(geometry, this.renderMaterial);
+    // Update uniforms to use previous frame as input
+    this.simulationMaterial.uniforms.positions.value = temp.texture;
+    this.renderMaterial.uniforms.positions.value = this.currentTarget.texture;
   }
 
   update(time) {
-    // Update the simulation and render the result to a target texture
-    this.renderer.clear();
+    // Update simulation uniforms
+    this.simulationMaterial.uniforms.uTime.value = time;
 
-    this.renderer.setRenderTarget(this.rtt);
-    this.renderer.render(this.scene, this.camera);
+    // Render simulation to current target
+    this.renderer.setRenderTarget(this.currentTarget);
+    this.renderer.render(this.getSimScene(), this.orthoCamera);
     this.renderer.setRenderTarget(null);
 
-    // Use the result of the swap as the new position for the particles' renderer
-    this.particles.material.uniforms.positions.value = this.rtt.texture;
-
-    this.simulationMaterial.uniforms.uTime.value = time;
+    // Swap buffers for next frame
+    this.swapTargets();
   }
 }
