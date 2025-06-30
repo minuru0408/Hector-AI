@@ -32,6 +32,7 @@ export default class OrbScene {
       });
       this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       this.renderer.setSize(window.innerWidth, window.innerHeight);
+      this.renderer.setClearColor(0x111111, 1);
       document.body.appendChild(this.renderer.domElement);
 
       // Initialize scene only after successful renderer creation
@@ -48,6 +49,7 @@ export default class OrbScene {
     // Move scene setup here
     this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
     this.camera.position.z = 5;
+    this.camera.lookAt(0, 0, 0);
 
     this.scene = new THREE.Scene();
 
@@ -65,16 +67,17 @@ export default class OrbScene {
       positions[i + 1] = radius * Math.sin(phi) * Math.sin(theta);
       positions[i + 2] = radius * Math.cos(phi);
     }
+
+    console.log('First particle position:', positions[0], positions[1], positions[2]);
     
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
     // 5. Material (what the points look like)
     const material = new THREE.PointsMaterial({
       color: 0xffffff,
-      size: 0.02,
+      size: 0.1,
       transparent: true,
-      opacity: 0.8,
-      blending: THREE.AdditiveBlending
+      opacity: 1.0
     });
 
     // 6. Particles (the visible cloud)
@@ -108,7 +111,9 @@ export default class OrbScene {
 
   animate() {
     if (!this.isActive) return;
-    
+
+    console.log('Animating...');
+
     requestAnimationFrame(() => this.animate());
 
     // spin the particles slowly
