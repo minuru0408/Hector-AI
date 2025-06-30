@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Hector — a desktop AI assistant with real-time particle UI",
   "main": "electron.js",
-
+  "targets": {
+    "main": false
+  },
   "scripts": {
     "dev": "parcel serve index.html",
     "build": "parcel build index.html",
