@@ -1,3 +1,3 @@
-import Emitter from 'tiny-emitter';
+import TinyEmitter from 'tiny-emitter/instance';
 
-export default new Emitter();
+export default TinyEmitter;
