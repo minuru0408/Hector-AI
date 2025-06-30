@@ -2,7 +2,8 @@
   "name": "hector-assistant",
   "version": "1.0.0",
   "description": "Hector — a desktop AI assistant with real-time particle UI",
-  "main": "main.js",
+  "main": "electron.js",
+
   "scripts": {
     "dev": "parcel serve index.html",
     "build": "parcel build index.html",
