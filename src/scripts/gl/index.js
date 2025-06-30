@@ -186,6 +186,7 @@ export default class GL {
     this.controls.update();
 
     this.time = this.clock.getElapsedTime();
+    console.log('Rendering frame at time', this.time);
 
     this.fbo.update(this.time);
 
