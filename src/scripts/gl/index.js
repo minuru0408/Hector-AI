@@ -48,15 +48,27 @@ export default class GL {
     this.clock = new THREE.Clock();
     this.time = null;
 
+    this.isInitialized = false;
+
     this.init();
   }
 
   init() {
+    console.log('Initializing GL...');
     this.addCanvas();
-    this.addEvents();
-    this.setGui();
     this.createFBO();
     this.createScreenQuad();
+    this.setGui();
+    
+    // Only add events after everything is initialized
+    if (this.fbo && this.fullScreenQuad) {
+      this.isInitialized = true;
+      this.addEvents();
+      // Start animation loop
+      this.renderer.setAnimationLoop(this.render.bind(this));
+    } else {
+      console.error('Initialization failed');
+    }
   }
 
   addCanvas() {
@@ -66,7 +78,7 @@ export default class GL {
   }
 
   addEvents() {
-    Events.on('tick', this.render.bind(this));
+    // Remove tick event since we're using setAnimationLoop
     Events.on('resize', this.resize.bind(this));
   }
 
@@ -178,28 +190,26 @@ export default class GL {
   }
 
   resize() {
+    if (!this.isInitialized) return;
+    
     let width = store.bounds.ww;
     let height = store.bounds.wh;
 
     this.camera.aspect = width / height;
     this.renderer.setSize(width, height);
-
     this.camera.updateProjectionMatrix();
 
-    this.fullScreenQuad.material.uniforms.uResolution.value.x = store.bounds.ww;
-    this.fullScreenQuad.material.uniforms.uResolution.value.y = store.bounds.wh;
+    if (this.fullScreenQuad) {
+      this.fullScreenQuad.material.uniforms.uResolution.value.x = width;
+      this.fullScreenQuad.material.uniforms.uResolution.value.y = height;
+    }
   }
 
   render() {
-    // Add safety check
-    if (!this.fbo) {
-      console.error('Cannot render: FBO not initialized');
-      return;
-    }
+    if (!this.isInitialized) return;
 
     this.controls.update();
     this.time = this.clock.getElapsedTime();
-    console.log('Rendering frame at time', this.time);
 
     try {
       this.fbo.update(this.time);
@@ -207,14 +217,8 @@ export default class GL {
       this.renderer.render(this.scene, this.camera);
     } catch (error) {
       console.error('Render error:', error);
+      this.isInitialized = false;
+      this.renderer.setAnimationLoop(null);
     }
-
-    this.renderer.setAnimationLoop(() => {
-      this.time = this.clock.getElapsedTime();
-      this.fbo.update(this.time);
-      this.fullScreenQuad.material.uniforms.uTime.value = this.time;
-      this.renderer.render(this.scene, this.camera);
-      console.log('Frame rendered');
-    });
   }
 }
