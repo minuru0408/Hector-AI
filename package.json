@@ -4,8 +4,8 @@
   "main": "electron.js",
   "type": "module",
   "targets": {
-  "main": false
-},
+    "main": false
+  },
   "scripts": {
     "dev": "parcel index.html",
     "build": "parcel build index.html",
@@ -16,6 +16,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "buffer": "^6.0.3",
     "electron": "^37.1.0",
     "parcel": "^2.15.4"
   },

@@ -1,5 +1,6 @@
 import * as THREE from 'three';
-import { OrbitControls } from 'three-stdlib';
+import { OrbitControls } from 'three-stdlib/controls/OrbitControls.js';
+
 
 
 export default class OrbScene {
