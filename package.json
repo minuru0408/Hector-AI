@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "electron.js",
   "type": "module",
+  "targets": {
+  "main": false
+},
   "scripts": {
     "dev": "parcel index.html",
     "build": "parcel build index.html",
