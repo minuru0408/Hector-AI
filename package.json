@@ -2,7 +2,7 @@
   "name": "hector-ai",
   "version": "1.0.0",
   "type": "commonjs",
-  "main": "dist/index.html",
+  "main": "electron.js",
   "targets": {
     "main": false
   },
