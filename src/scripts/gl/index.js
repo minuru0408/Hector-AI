@@ -129,7 +129,7 @@ export default class GL {
       return;
     }
 
-    console.log('Initializing FBO...');
+    console.log('✅ FBO object:', this.fbo);
     const width = 512;
     const height = 512;
 
