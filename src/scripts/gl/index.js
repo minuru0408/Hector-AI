@@ -12,11 +12,13 @@ export default class OrbScene {
     this.controls = null;
     this.isActive = false;
 
-    // Wait for DOM to be ready
-    if (document.readyState === 'complete') {
-      this.init();
-    } else {
-      window.addEventListener('load', () => this.init());
+    // Wait for document to be available
+    if (typeof window !== 'undefined') {
+      if (document.readyState === 'complete') {
+        this.init();
+      } else {
+        window.addEventListener('DOMContentLoaded', () => this.init());
+      }
     }
   }
 
