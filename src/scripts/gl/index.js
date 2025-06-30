@@ -1,11 +1,20 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+
 export default class OrbScene {
   constructor() {
-    // 1. Renderer (like a projector)
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    if (!this.checkWebGLSupport()) {
+      throw new Error('WebGL not supported');
+    }
+
+    // Initialize renderer
+    this.renderer = new THREE.WebGLRenderer({ 
+      antialias: true, 
+      alpha: true,
+      powerPreference: "high-performance" 
+    });
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.setClearColor(0x000000, 0);
     document.body.appendChild(this.renderer.domElement);
 
     // 2. Camera (like your eyes)
@@ -15,19 +24,31 @@ export default class OrbScene {
     // 3. Scene (like a stage)
     this.scene = new THREE.Scene();
 
-    // 4. Geometry (points in space)
+    // Improved particle system
     const geometry = new THREE.BufferGeometry();
-    const vertices = [];
-    for (let i = 0; i < 10000; i++) {
-      const x = (Math.random() - 0.5) * 2;
-      const y = (Math.random() - 0.5) * 2;
-      const z = (Math.random() - 0.5) * 2;
-      vertices.push(x, y, z);
+    const particleCount = 15000;
+    const positions = new Float32Array(particleCount * 3);
+    
+    for (let i = 0; i < particleCount * 3; i += 3) {
+      const radius = 2;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos((Math.random() * 2) - 1);
+      
+      positions[i] = radius * Math.sin(phi) * Math.cos(theta);
+      positions[i + 1] = radius * Math.sin(phi) * Math.sin(theta);
+      positions[i + 2] = radius * Math.cos(phi);
     }
-    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+    
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
     // 5. Material (what the points look like)
-    const material = new THREE.PointsMaterial({ color: 0xffffff, size: 0.01 });
+    const material = new THREE.PointsMaterial({
+      color: 0xffffff,
+      size: 0.02,
+      transparent: true,
+      opacity: 0.8,
+      blending: THREE.AdditiveBlending
+    });
 
     // 6. Particles (the visible cloud)
     this.particles = new THREE.Points(geometry, material);
@@ -36,11 +57,35 @@ export default class OrbScene {
     // 7. Controls (mouse orbit)
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
+    // Add resize handler
+    this.handleResize = this.handleResize.bind(this);
+    window.addEventListener('resize', this.handleResize);
+
+    this.isActive = true;
     // 8. Animation loop (keep redrawing)
     this.animate();
   }
 
+  checkWebGLSupport() {
+    try {
+      return !!window.WebGLRenderingContext;
+    } catch(e) {
+      return false;
+    }
+  }
+
+  handleResize() {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    
+    this.camera.aspect = width / height;
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(width, height);
+  }
+
   animate() {
+    if (!this.isActive) return;
+    
     requestAnimationFrame(() => this.animate());
 
     // spin the particles slowly
@@ -48,5 +93,17 @@ export default class OrbScene {
 
     this.controls.update();
     this.renderer.render(this.scene, this.camera);
+  }
+
+  dispose() {
+    this.isActive = false;
+    window.removeEventListener('resize', this.handleResize);
+    
+    this.particles.geometry.dispose();
+    this.particles.material.dispose();
+    this.scene.remove(this.particles);
+    
+    this.renderer.dispose();
+    this.controls.dispose();
   }
 }
