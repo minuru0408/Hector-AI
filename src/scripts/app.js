@@ -1,2 +1,11 @@
-import OrbScene from './gl/index.js';
-new OrbScene();
+import OrbScene from './gl';
+
+let gl;
+try {
+  gl = new OrbScene();
+  window.gl = gl; // Prevent tree-shaking
+} catch (error) {
+  console.error('Failed to initialize 3D scene:', error);
+}
+
+export default gl;

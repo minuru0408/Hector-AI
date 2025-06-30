@@ -3,25 +3,50 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 export default class OrbScene {
   constructor() {
-    if (!this.checkWebGLSupport()) {
-      throw new Error('WebGL not supported');
+    // Remove early WebGL check
+    // Initialize properties
+    this.renderer = null;
+    this.camera = null;
+    this.scene = null;
+    this.particles = null;
+    this.controls = null;
+    this.isActive = false;
+
+    // Wait for DOM to be ready
+    if (document.readyState === 'complete') {
+      this.init();
+    } else {
+      window.addEventListener('load', () => this.init());
     }
+  }
 
-    // Initialize renderer
-    this.renderer = new THREE.WebGLRenderer({ 
-      antialias: true, 
-      alpha: true,
-      powerPreference: "high-performance" 
-    });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(this.renderer.domElement);
+  init() {
+    try {
+      // Initialize renderer
+      this.renderer = new THREE.WebGLRenderer({ 
+        antialias: true, 
+        alpha: true,
+        powerPreference: "high-performance" 
+      });
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      this.renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(this.renderer.domElement);
 
-    // 2. Camera (like your eyes)
+      // Initialize scene only after successful renderer creation
+      this.setupScene();
+      this.isActive = true;
+      this.animate();
+    } catch (error) {
+      console.error('Failed to initialize WebGL:', error);
+      throw new Error('WebGL initialization failed');
+    }
+  }
+
+  setupScene() {
+    // Move scene setup here
     this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
     this.camera.position.z = 5;
 
-    // 3. Scene (like a stage)
     this.scene = new THREE.Scene();
 
     // Improved particle system
@@ -60,10 +85,6 @@ export default class OrbScene {
     // Add resize handler
     this.handleResize = this.handleResize.bind(this);
     window.addEventListener('resize', this.handleResize);
-
-    this.isActive = true;
-    // 8. Animation loop (keep redrawing)
-    this.animate();
   }
 
   checkWebGLSupport() {
