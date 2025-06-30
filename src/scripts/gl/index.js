@@ -32,7 +32,7 @@ export default class OrbScene {
       });
       this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       this.renderer.setSize(window.innerWidth, window.innerHeight);
-      this.renderer.setClearColor(0x111111, 1);
+      this.renderer.setClearColor(0xffffff, 1);  // Changed to white background
       document.body.appendChild(this.renderer.domElement);
 
       // Initialize scene only after successful renderer creation
@@ -68,15 +68,15 @@ export default class OrbScene {
       positions[i + 2] = radius * Math.cos(phi);
     }
 
-    console.log('First particle position:', positions[0], positions[1], positions[2]);
+    console.log('Example particle:', positions[0], positions[1], positions[2]);
     
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
-    // 5. Material (what the points look like)
+    // Material (what the points look like)
     const material = new THREE.PointsMaterial({
-      color: 0xffffff,
-      size: 0.1,
-      transparent: true,
+      color: 0xff0000,    // Changed to red
+      size: 0.5,          // Increased size
+      transparent: false,  // Disabled transparency
       opacity: 1.0
     });
 
