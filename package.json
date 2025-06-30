@@ -26,7 +26,8 @@
     "glslify-bundle": "^5.1.1",
     "glslify-deps": "^1.3.2",
     "parcel": "^2.15.4",
-    "sass": "^1.32.13"
+    "sass": "^1.32.13",
+    "@parcel/transformer-bundle-text": "^2.15.4"
   },
   "@parcel/transformer-glsl": {
     "version": 100

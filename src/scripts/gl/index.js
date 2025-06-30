@@ -7,12 +7,12 @@ import store from '../store';
 
 import FBO from './FBO';
 
-import simVertex from './shaders/simulation.vert.glsl';
-import simFragment from './shaders/simulation.frag.glsl';
-import particlesVertex from './shaders/particles.vert.glsl';
-import particlesFragment from './shaders/particles.frag.glsl';
-import fullScreenVertex from './shaders/fullscreen.vert.glsl';
-import fullScreenFragment from './shaders/fullscreen.frag.glsl';
+import simVertex from 'bundle-text:./shaders/simulation.vert.glsl';
+import simFragment from 'bundle-text:./shaders/simulation.frag.glsl';
+import particlesVertex from 'bundle-text:./shaders/particles.vert.glsl';
+import particlesFragment from 'bundle-text:./shaders/particles.frag.glsl';
+import fullScreenVertex from 'bundle-text:./shaders/fullscreen.vert.glsl';
+import fullScreenFragment from 'bundle-text:./shaders/fullscreen.frag.glsl';
 
 import { getRandomSpherePoint } from '../utils';
 
