@@ -12,10 +12,6 @@ export default class FBO {
     this.targetA = this.createRenderTarget();
     this.targetB = this.createRenderTarget();
 
-    // Set initial positions
-    this.renderer.setRenderTarget(this.targetA);
-    this.renderer.render(this.getSimScene(), this.orthoCamera);
-    this.renderer.setRenderTarget(null);
 
     // Create particle system
     const geometry = new THREE.BufferGeometry();
@@ -47,9 +43,12 @@ export default class FBO {
     this.quad = new THREE.Mesh(plane, this.simulationMaterial);
     this.orthoScene.add(this.quad);
 
-    // Set initial texture
+    // Set initial texture and render once to populate render targets
     this.currentTarget = this.targetA;
     this.renderMaterial.uniforms.positions.value = this.targetA.texture;
+    this.renderer.setRenderTarget(this.targetA);
+    this.renderer.render(this.getSimScene(), this.orthoCamera);
+    this.renderer.setRenderTarget(null);
   }
 
   createRenderTarget() {
