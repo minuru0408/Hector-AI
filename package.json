@@ -23,7 +23,6 @@
   "dependencies": {
     "dat.gui": "^0.7.9",
     "lodash.debounce": "^4.0.8",
-    "three": "^0.178.0",
-    "three-stdlib": "^2.36.0"
+    "three": "^0.178.0"
   }
 }

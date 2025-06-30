@@ -1,8 +1,5 @@
 import * as THREE from 'three';
-import { OrbitControls } from 'three-stdlib/controls/OrbitControls.js';
-
-
-
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 export default class OrbScene {
   constructor() {
     // 1. Renderer (like a projector)
