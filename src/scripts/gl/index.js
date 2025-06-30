@@ -48,6 +48,14 @@ export default class GL {
     this.clock = new THREE.Clock();
     this.time = null;
 
+    // Initialize tweaks before anything else
+    this.tweaks = {
+      pointSize: 1.2,
+      speed: 0.3,
+      curlFreq: 0.25,
+      opacity: 0.35,
+    };
+
     this.isInitialized = false;
 
     this.init();
@@ -56,9 +64,9 @@ export default class GL {
   init() {
     console.log('Initializing GL...');
     this.addCanvas();
+    this.setGui(); // Move GUI setup before FBO creation
     this.createFBO();
     this.createScreenQuad();
-    this.setGui();
     
     // Only add events after everything is initialized
     if (this.fbo && this.fullScreenQuad) {
@@ -83,16 +91,9 @@ export default class GL {
   }
 
   setGui() {
-    this.tweaks = {
-      pointSize: 1.2,
-      speed: 0.3,
-      curlFreq: 0.25,
-      opacity: 0.35,
-    };
-
     GUI.add(this.tweaks, 'pointSize', 1, 3, 0.1)
        .name('particle size')
-       .onChange(() => this.renderMaterial.uniforms.uPointSize.value = this.tweaks.pointSize);
+       .onChange(() => this.renderMaterial?.uniforms.uPointSize.value = this.tweaks.pointSize);
 
     GUI.add(this.tweaks, 'speed', 0.0, 1, 0.001)
        .onChange(() => this.simMaterial.uniforms.uSpeed.value = this.tweaks.speed);
@@ -106,6 +107,12 @@ export default class GL {
   }
 
   createFBO() {
+    // Add safety check
+    if (!this.tweaks) {
+      console.error('Cannot create FBO: tweaks not initialized');
+      return;
+    }
+
     console.log('Initializing FBO...');
     // width and height of FBO
     const width = 512;
