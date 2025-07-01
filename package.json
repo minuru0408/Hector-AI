@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
+    "start": "npm run build && electron .",
     "dev": "cross-env NODE_ENV=development concurrently \"parcel index.html\" \"electron .\"",
-    "build": "parcel build index.html && electron-builder",
-    "clean": "rm -rf dist .parcel-cache"
+    "build": "parcel build index.html",
+    "clean": "rm -rf dist .parcel-cache",
+    "package": "npm run build && electron-builder"
   },
   "devDependencies": {
     "electron": "^28.0.0",
@@ -15,5 +16,15 @@
     "parcel": "^2.15.4",
     "concurrently": "^8.0.0",
     "cross-env": "^7.0.3"
+  },
+  "build": {
+    "appId": "com.hector.ai",
+    "files": [
+      "dist/**/*",
+      "main.js"
+    ],
+    "directories": {
+      "output": "release"
+    }
   }
 }

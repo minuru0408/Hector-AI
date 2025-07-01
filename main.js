@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
+const isDev = process.env.NODE_ENV === 'development';
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -11,32 +12,24 @@ function createWindow() {
     }
   });
 
-  // In development, use the parcel dev server
-  if (process.env.NODE_ENV === 'development') {
+  if (isDev) {
     win.loadURL('http://localhost:1234');
-  } else {
-    // In production, use the built files
-    win.loadFile(path.join(__dirname, 'dist/index.html'));
-  }
-
-  // Open DevTools in development
-  if (process.env.NODE_ENV === 'development') {
     win.webContents.openDevTools();
+  } else {
+    win.loadFile(path.join(__dirname, './dist/index.html'));
   }
 }
 
-app.whenReady().then(() => {
-  createWindow();
-
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
-    }
-  });
-});
+app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
+  }
+});
+
+app.on('activate', () => {
+  if (BrowserWindow.getAllWindows().length === 0) {
+    createWindow();
   }
 });
