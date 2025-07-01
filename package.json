@@ -2,10 +2,18 @@
   "name": "hector-ai",
   "version": "1.0.0",
   "main": "main.js",
+  "source": "index.html",
+  "targets": {
+    "main": false,
+    "renderer": {
+      "source": "index.html",
+      "distDir": "./dist"
+    }
+  },
   "scripts": {
     "start": "npm run build && electron .",
     "dev": "cross-env NODE_ENV=development concurrently \"parcel index.html\" \"electron .\"",
-    "build": "parcel build index.html",
+    "build": "parcel build --target renderer",
     "clean": "rm -rf dist .parcel-cache",
     "package": "npm run build && electron-builder"
   },
