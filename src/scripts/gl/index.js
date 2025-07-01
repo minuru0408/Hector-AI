@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import * as dat from 'dat.gui';
+import FBO from './FBO';
 
 export default class OrbScene {
   constructor() {
@@ -11,6 +12,9 @@ export default class OrbScene {
     this.controls = null;
     this.isActive = false;
     this.rotationSpeed = 0.001;
+    this.fbo = null;
+    this.simMaterial = null;
+    this.renderMaterial = null;
 
     console.log('OrbScene constructed');
 
@@ -95,6 +99,60 @@ export default class OrbScene {
 
     // 🛠️ dat.GUI controls
     this.initGUI();
+
+    // Create simulation material
+    this.simMaterial = new THREE.ShaderMaterial({
+      uniforms: {
+        uTime: { value: 0 },
+        positions: { value: null }
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform float uTime;
+        varying vec2 vUv;
+        void main() {
+          vec2 position = vUv;
+          position.x += sin(uTime * 0.1 + position.y * 10.0) * 0.01;
+          gl_FragColor = vec4(position, 0.0, 1.0);
+        }
+      `
+    });
+
+    // Create render material
+    this.renderMaterial = new THREE.ShaderMaterial({
+      uniforms: {
+        positions: { value: null },
+        pointSize: { value: 2.0 }
+      },
+      vertexShader: `
+        uniform sampler2D positions;
+        uniform float pointSize;
+        varying vec3 vColor;
+        void main() {
+          vec4 pos = texture2D(positions, position.xy);
+          vColor = color;
+          gl_PointSize = pointSize;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(pos.xy * 2.0 - 1.0, 0.0, 1.0);
+        }
+      `,
+      fragmentShader: `
+        varying vec3 vColor;
+        void main() {
+          gl_FragColor = vec4(vColor, 1.0);
+        }
+      `,
+      transparent: true
+    });
+
+    // Initialize FBO
+    this.fbo = new FBO(256, 256, this.renderer, this.simMaterial, this.renderMaterial);
+    this.scene.add(this.fbo.particles);
   }
 
   initGUI() {
@@ -141,7 +199,9 @@ export default class OrbScene {
 
     requestAnimationFrame(() => this.animate());
 
-    this.particles.rotation.y += this.rotationSpeed;
+    if (this.fbo) {
+      this.fbo.update(performance.now() * 0.001);
+    }
 
     this.controls.update();
     this.renderer.render(this.scene, this.camera);
@@ -157,5 +217,14 @@ export default class OrbScene {
 
     this.renderer.dispose();
     this.controls.dispose();
+    if (this.fbo) {
+      this.fbo.rtt.dispose();
+    }
+    if (this.simMaterial) {
+      this.simMaterial.dispose();
+    }
+    if (this.renderMaterial) {
+      this.renderMaterial.dispose();
+    }
   }
 }
