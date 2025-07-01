@@ -7,7 +7,7 @@
     "main": false,
     "renderer": {
       "source": "index.html",
-v      "distDir": "./dist",
+     "distDir": "./dist",
       "publicUrl": ".",
       "context": "browser"
     }
