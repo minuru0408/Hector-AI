@@ -1,33 +1,14 @@
 # Hector-AI
 
-Hector-AI is an Electron application that displays a 3D scene in a desktop window. The project uses [Parcel](https://parceljs.org/) to bundle the files and [Electron](https://www.electronjs.org/) to create the desktop app.
-
-## Building the project
-
-To bundle the JavaScript and HTML files, run:
-
-```bash
-npm run build
-```
-
-This command uses Parcel to create a `dist` folder containing the production build.
+Hector-AI is a simple Electron app that shows a 3D scene. It runs directly in Electron without a browser build step.
 
 ## Running the Electron app
 
-Run the following command to build the web files and launch the Electron window:
+1. Install dependencies with `npm install`.
+2. Start the app with:
 
 ```bash
 npm start
 ```
 
-The `prestart` script automatically runs `npm run build` and then Electron opens the files from the `dist` folder.
-
-## Developing with live reload
-
-During development you can run a server that reloads when files change:
-
-```bash
-npm run dev
-```
-
-Parcel serves `index.html` and watches for file updates so you can see changes immediately in the browser.
+This command opens the Electron window.
