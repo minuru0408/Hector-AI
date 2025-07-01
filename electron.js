@@ -10,8 +10,8 @@ function createWindow() {
     },
   });
 
-  // Load built HTML file from Parcel (dist folder)
-  win.loadFile(path.join(__dirname, 'dist', 'index.html'));
+  // Load local HTML file directly
+  win.loadFile(path.join(__dirname, 'index.html'));
 }
 
 app.whenReady().then(createWindow);

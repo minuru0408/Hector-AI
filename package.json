@@ -3,13 +3,7 @@
   "version": "1.0.0",
   "type": "commonjs",
   "main": "electron.js",
-  "targets": {
-    "main": false
-  },
   "scripts": {
-    "dev": "parcel index.html",
-    "build": "parcel build index.html",
-    "prestart": "npm run build",
     "start": "electron .",
     "test": "echo \"No tests yet\""
   },
@@ -18,9 +12,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "buffer": "^6.0.3",
-    "electron": "^37.1.0",
-    "parcel": "^2.15.4"
+    "electron": "^37.1.0"
   },
   "dependencies": {
     "dat.gui": "^0.7.9",
