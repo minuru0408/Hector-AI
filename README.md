@@ -14,13 +14,13 @@ This command uses Parcel to create a `dist` folder containing the production bui
 
 ## Running the Electron app
 
-After building the project, start the Electron application with:
+Run the following command to build the web files and launch the Electron window:
 
 ```bash
 npm start
 ```
 
-This launches a desktop window that loads the files from the `dist` folder.
+This command first runs `npm run build` to create the `dist` folder and then opens Electron using those files.
 
 ## Developing with live reload
 
