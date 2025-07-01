@@ -9,4 +9,3 @@ Install dependencies with `npm install` and then run:
 ```bash
 npm start
 ```
-
