@@ -9,7 +9,8 @@
   "scripts": {
     "dev": "parcel index.html",
     "build": "parcel build index.html",
-    "start": "npm run build && electron electron.js",
+    "prestart": "npm run build",
+    "start": "electron .",
     "test": "echo \"No tests yet\""
   },
   "keywords": [],

@@ -20,7 +20,7 @@ Run the following command to build the web files and launch the Electron window:
 npm start
 ```
 
-This command first runs `npm run build` to create the `dist` folder and then opens Electron using those files.
+The `prestart` script automatically runs `npm run build` and then Electron opens the files from the `dist` folder.
 
 ## Developing with live reload
 
