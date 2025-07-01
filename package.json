@@ -7,7 +7,9 @@
     "main": false,
     "renderer": {
       "source": "index.html",
-      "distDir": "./dist"
+v      "distDir": "./dist",
+      "publicUrl": ".",
+      "context": "browser"
     }
   },
   "scripts": {
@@ -33,11 +35,14 @@
     "appId": "com.hector.ai",
     "files": [
       "dist/**/*",
-      "main.js"
+      "main.js",
+      "package.json"
     ],
     "directories": {
-      "output": "release"
-    }
+      "output": "release",
+      "buildResources": "dist"
+    },
+    "asar": true
   },
   "browserslist": [
     "last 2 Chrome versions"
